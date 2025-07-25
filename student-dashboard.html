@@ -1,0 +1,232 @@
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Öğrenci Paneli - EduPlatform</title>
+  <link href="style.css" rel="stylesheet" type="text/css" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="nav-brand">
+        <h2><i class="fas fa-graduation-cap"></i> EduPlatform</h2>
+      </div>
+      <div class="nav-menu">
+        <span class="user-info">
+          <i class="fas fa-user-graduate"></i> Öğrenci Paneli
+        </span>
+        <button class="btn-primary" onclick="logout()">
+          <i class="fas fa-sign-out-alt"></i> Çıkış
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Dashboard Header -->
+  <section class="dashboard-header">
+    <div class="container">
+      <h1><i class="fas fa-tachometer-alt"></i> Hızlı İşlemler</h1>
+      <p>Hoş geldiniz! Eğitim materyallerinize erişin ve testlerinizi çözün.</p>
+    </div>
+  </section>
+
+  <!-- Daily Literature Section -->
+  <section class="daily-literature">
+    <div class="container">
+      <h2><i class="fas fa-book-open"></i> Günün Eseri</h2>
+      <div class="literature-card" id="dailyLiterature">
+        <div class="literature-loading">
+          <i class="fas fa-spinner fa-spin"></i> Günün eseri yükleniyor...
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quick Stats -->
+  <section class="quick-stats">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">
+            <i class="fas fa-book"></i>
+          </div>
+          <div class="stat-info">
+            <h3>3</h3>
+            <p>Aktif Ders</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">
+            <i class="fas fa-quiz"></i>
+          </div>
+          <div class="stat-info">
+            <h3>8</h3>
+            <p>Çözülen Test</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">
+            <i class="fas fa-trophy"></i>
+          </div>
+          <div class="stat-info">
+            <h3>85%</h3>
+            <p>Başarı Oranı</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">
+            <i class="fas fa-clock"></i>
+          </div>
+          <div class="stat-info">
+            <h3>24h</h3>
+            <p>Çalışma Süresi</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <section class="main-content">
+    <div class="container">
+      <div class="content-grid">
+        <!-- My Courses -->
+        <div class="content-section">
+          <h2><i class="fas fa-graduation-cap"></i> Derslerim</h2>
+          <div class="course-list">
+            <div class="course-card">
+              <div class="course-icon">
+                <i class="fas fa-book-open"></i>
+              </div>
+              <div class="course-info">
+                <h3>Türk Dili ve Edebiyatı</h3>
+                <p>Öğretmen: Ayşe Yılmaz</p>
+                <div class="course-progress">
+                  <div class="progress-bar">
+                    <div class="progress-fill" style="width: 75%"></div>
+                  </div>
+                  <span>75% Tamamlandı</span>
+                </div>
+              </div>
+              <button class="btn-primary btn-small">Dersi Aç</button>
+            </div>
+
+            <div class="course-card">
+              <div class="course-icon">
+                <i class="fas fa-language"></i>
+              </div>
+              <div class="course-info">
+                <h3>Türkçe</h3>
+                <p>Öğretmen: Mehmet Kaya</p>
+                <div class="course-progress">
+                  <div class="progress-bar">
+                    <div class="progress-fill" style="width: 85%"></div>
+                  </div>
+                  <span>85% Tamamlandı</span>
+                </div>
+              </div>
+              <button class="btn-primary btn-small">Dersi Aç</button>
+            </div>
+
+            <div class="course-card">
+              <div class="course-icon">
+                <i class="fas fa-heart"></i>
+              </div>
+              <div class="course-info">
+                <h3>Rehberlik</h3>
+                <p>Öğretmen: Fatma Demir</p>
+                <div class="course-progress">
+                  <div class="progress-bar">
+                    <div class="progress-fill" style="width: 60%"></div>
+                  </div>
+                  <span>60% Tamamlandı</span>
+                </div>
+              </div>
+              <button class="btn-primary btn-small">Dersi Aç</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Tests -->
+        <div class="content-section">
+          <h2><i class="fas fa-clipboard-list"></i> Son Testler</h2>
+          <div class="test-list">
+            <div class="test-item">
+              <div class="test-info">
+                <h4>Türk Dili ve Edebiyatı - Divan Edebiyatı</h4>
+                <p><i class="fas fa-calendar"></i> 2 gün önce</p>
+              </div>
+              <div class="test-score success">
+                <span>85/100</span>
+              </div>
+            </div>
+
+            <div class="test-item">
+              <div class="test-info">
+                <h4>Türkçe - Anlam Bilgisi</h4>
+                <p><i class="fas fa-calendar"></i> 5 gün önce</p>
+              </div>
+              <div class="test-score warning">
+                <span>72/100</span>
+              </div>
+            </div>
+
+            <div class="test-item">
+              <div class="test-info">
+                <h4>Rehberlik - Kişisel Gelişim</h4>
+                <p><i class="fas fa-calendar"></i> 1 hafta önce</p>
+              </div>
+              <div class="test-score success">
+                <span>91/100</span>
+              </div>
+            </div>
+          </div>
+          <button class="btn-outline btn-full">Tüm Testleri Görüntüle</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quick Actions -->
+  <section class="quick-actions">
+    <div class="container">
+      <h2>Hızlı İşlemler</h2>
+      <div class="actions-grid">
+        <button class="action-card">
+          <i class="fas fa-file-pdf"></i>
+          <h3>PDF İndir</h3>
+          <p>Ders materyallerini indir</p>
+        </button>
+
+        <button class="action-card">
+          <i class="fas fa-quiz"></i>
+          <h3>Test Çöz</h3>
+          <p>Yeni bir test başlat</p>
+        </button>
+
+        <button class="action-card">
+          <i class="fas fa-bookmark"></i>
+          <h3>Notlarım</h3>
+          <p>Kişisel notlarını görüntüle</p>
+        </button>
+
+        <button class="action-card">
+          <i class="fas fa-chart-line"></i>
+          <h3>İlerlemeyi Gör</h3>
+          <p>Detaylı analiz görüntüle</p>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Supabase Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <script src="supabaseClient.js"></script>
+  <script src="auth.js"></script>
+  <script src="student-dashboard.js"></script>
+</body>
+</html>
