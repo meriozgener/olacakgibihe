@@ -1,0 +1,188 @@
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EduPlatform - Lise Eğitim Sistemi</title>
+  <link href="style.css" rel="stylesheet" type="text/css" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="nav-brand">
+        <h2><i class="fas fa-graduation-cap"></i> EduPlatform</h2>
+      </div>
+      <div class="nav-menu">
+        <button class="btn-primary" onclick="showLoginModal()">
+          <i class="fas fa-sign-in-alt"></i> Giriş Yap
+        </button>
+        <button class="btn-secondary" onclick="showRegisterModal()">
+          <i class="fas fa-user-plus"></i> Kayıt Ol
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Lise Eğitiminde Yeni Dönem</h1>
+      <p>Öğretmenler ve öğrenciler için tasarlanmış kapsamlı eğitim platformu</p>
+      <div class="hero-buttons">
+        <button class="btn-large btn-primary" onclick="showRegisterModal()">
+          <i class="fas fa-rocket"></i> Hemen Başla
+        </button>
+        <button class="btn-large btn-outline" onclick="scrollToFeatures()">
+          <i class="fas fa-info-circle"></i> Özellikler
+        </button>
+      </div>
+    </div>
+  </section>
+
+
+
+  <!-- Features Section -->
+  <section class="features" id="features">
+    <div class="container">
+      <h2>Platform Özellikleri</h2>
+      <div class="features-grid">
+        <!-- Student Features -->
+        <div class="feature-card">
+          <div class="feature-icon student-icon">
+            <i class="fas fa-user-graduate"></i>
+          </div>
+          <h3>Öğrenci Paneli</h3>
+          <ul>
+            <li><i class="fas fa-file-pdf"></i> PDF konu anlatımları</li>
+            <li><i class="fas fa-quiz"></i> İnteraktif testler</li>
+            <li><i class="fas fa-users"></i> Sınıflara katılım</li>
+            <li><i class="fas fa-chart-line"></i> İlerleme takibi</li>
+          </ul>
+        </div>
+
+        <!-- Teacher Features -->
+        <div class="feature-card">
+          <div class="feature-icon teacher-icon">
+            <i class="fas fa-chalkboard-teacher"></i>
+          </div>
+          <h3>Öğretmen Paneli</h3>
+          <ul>
+            <li><i class="fas fa-upload"></i> İçerik yükleme</li>
+            <li><i class="fas fa-gamepad"></i> Kahoot benzeri testler</li>
+            <li><i class="fas fa-analytics"></i> Öğrenci analizi</li>
+            <li><i class="fas fa-classroom"></i> Sınıf yönetimi</li>
+          </ul>
+        </div>
+
+        <!-- Platform Features -->
+        <div class="feature-card">
+          <div class="feature-icon platform-icon">
+            <i class="fas fa-mobile-alt"></i>
+          </div>
+          <h3>Platform Avantajları</h3>
+          <ul>
+            <li><i class="fas fa-mobile"></i> Mobil uyumlu</li>
+            <li><i class="fas fa-shield-alt"></i> Güvenli</li>
+            <li><i class="fas fa-clock"></i> 7/24 erişim</li>
+            <li><i class="fas fa-cloud"></i> Bulut tabanlı</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Login Modal -->
+  <div class="modal" id="loginModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3><i class="fas fa-sign-in-alt"></i> Giriş Yap</h3>
+        <span class="close" onclick="closeModal('loginModal')">&times;</span>
+      </div>
+      <form class="auth-form" id="loginForm">
+        <div class="form-group">
+          <label for="loginEmail">E-posta</label>
+          <input type="email" id="loginEmail" required>
+        </div>
+        <div class="form-group">
+          <label for="loginPassword">Şifre</label>
+          <input type="password" id="loginPassword" required>
+        </div>
+        <div class="form-group">
+          <label for="userType">Kullanıcı Türü</label>
+          <select id="userType" required>
+            <option value="">Seçiniz</option>
+            <option value="student">Öğrenci</option>
+            <option value="teacher">Öğretmen</option>
+          </select>
+        </div>
+        <button type="submit" class="btn-primary btn-full">
+          <i class="fas fa-sign-in-alt"></i> Giriş Yap
+        </button>
+      </form>
+      <p class="auth-switch">
+        <a href="#" onclick="resetPassword()">Şifremi unuttum</a>
+      </p>
+      <p class="auth-switch">
+        Hesabınız yok mu? 
+        <a href="#" onclick="switchToRegister()">Kayıt olun</a>
+      </p>
+    </div>
+  </div>
+
+  <!-- Register Modal -->
+  <div class="modal" id="registerModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3><i class="fas fa-user-plus"></i> Kayıt Ol</h3>
+        <span class="close" onclick="closeModal('registerModal')">&times;</span>
+      </div>
+      <form class="auth-form" id="registerForm">
+        <div class="form-group">
+          <label for="registerName">Ad Soyad</label>
+          <input type="text" id="registerName" required>
+        </div>
+        <div class="form-group">
+          <label for="registerEmail">E-posta</label>
+          <input type="email" id="registerEmail" required>
+        </div>
+        <div class="form-group">
+          <label for="registerPassword">Şifre</label>
+          <input type="password" id="registerPassword" required>
+        </div>
+        <div class="form-group">
+          <label for="registerUserType">Kullanıcı Türü</label>
+          <select id="registerUserType" required>
+            <option value="">Seçiniz</option>
+            <option value="student">Öğrenci</option>
+            <option value="teacher">Öğretmen</option>
+          </select>
+        </div>
+        <button type="submit" class="btn-primary btn-full">
+          <i class="fas fa-user-plus"></i> Kayıt Ol
+        </button>
+      </form>
+      <p class="auth-switch">
+        Zaten hesabınız var mı? 
+        <a href="#" onclick="switchToLogin()">Giriş yapın</a>
+      </p>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2024 EduPlatform. Tüm hakları saklıdır.</p>
+      <p>Lise düzeyi eğitim için tasarlanmıştır.</p>
+    </div>
+  </footer>
+
+  <!-- Supabase Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/dist/umd/supabase.js"></script>
+  <script src="supabaseClient.js"></script>
+  <script src="auth.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
