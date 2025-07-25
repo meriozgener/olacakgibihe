@@ -1,3 +1,153 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Öğretmen Paneli - EduPlatform</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <h2><i class="fas fa-chalkboard-teacher"></i> EduPlatform</h2>
+            </div>
+            <div class="nav-menu">
+                <span class="user-info">
+                    <i class="fas fa-user-tie"></i> Öğretmen Paneli
+                </span>
+                <button class="btn-primary" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> Çıkış
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Dashboard Header -->
+    <section class="dashboard-header">
+        <div class="container">
+            <h1><i class="fas fa-tachometer-alt"></i> Öğretmen Paneli</h1>
+            <p>Hoş geldiniz! Sınıflarınızı yönetin ve içerik paylaşın.</p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <section class="main-content">
+        <div class="container">
+            <div class="content-grid">
+                <!-- Left Column - Classes -->
+                <div class="section-card">
+                    <div class="section-header">
+                        <h2><i class="fas fa-users"></i> Sınıflarım</h2>
+                    </div>
+                    <div class="class-list">
+                        <div class="class-card">
+                            <div class="class-header">
+                                <h3>11-A Türk Dili ve Edebiyatı</h3>
+                                <span class="student-count">28 Öğrenci</span>
+                            </div>
+                            <div class="class-stats">
+                                <div class="stat">
+                                    <span class="label">Aktif Öğrenci:</span>
+                                    <span class="value success">25</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="label">Son Test Ortalaması:</span>
+                                    <span class="value success">82</span>
+                                </div>
+                            </div>
+                            <div class="class-actions">
+                                <button class="btn-primary">Yönet</button>
+                                <button class="btn-outline">İstatistikler</button>
+                            </div>
+                        </div>
+
+                        <div class="class-card">
+                            <div class="class-header">
+                                <h3>10-B Türkçe</h3>
+                                <span class="student-count">26 Öğrenci</span>
+                            </div>
+                            <div class="class-stats">
+                                <div class="stat">
+                                    <span class="label">Aktif Öğrenci:</span>
+                                    <span class="value warning">24</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="label">Son Test Ortalaması:</span>
+                                    <span class="value warning">74</span>
+                                </div>
+                            </div>
+                            <div class="class-actions">
+                                <button class="btn-primary">Yönet</button>
+                                <button class="btn-outline">İstatistikler</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column - Actions & Content -->
+                <div class="section-card">
+                    <div class="section-header">
+                        <h2><i class="fas fa-tasks"></i> Hızlı İşlemler</h2>
+                    </div>
+                    <div class="actions-grid">
+                        <div class="action-card">
+                            <i class="fas fa-upload"></i>
+                            <h3>İçerik Yükle</h3>
+                            <p>Yeni ders materyali yükleyin</p>
+                        </div>
+                        <div class="action-card">
+                            <i class="fas fa-question-circle"></i>
+                            <h3>Test Oluştur</h3>
+                            <p>Öğrencileriniz için test hazırlayın</p>
+                        </div>
+                        <div class="action-card">
+                            <i class="fas fa-book"></i>
+                            <h3>Edebi Metin</h3>
+                            <p>Edebi metin ekleyin ve paylaşın</p>
+                        </div>
+                        <div class="action-card">
+                            <i class="fas fa-chart-bar"></i>
+                            <h3>Analiz Görüntüle</h3>
+                            <p>Sınıf performansını analiz edin</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Uploaded Content Section -->
+            <div class="section-card">
+                <div class="section-header">
+                    <h2><i class="fas fa-folder-open"></i> Yüklenen İçerikler</h2>
+                </div>
+                <div class="uploaded-content-list" id="uploadedContentList">
+                    <div class="loading-content">
+                        <i class="fas fa-spinner fa-spin"></i> İçerikler yükleniyor...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Content Modal -->
+    <div id="contentModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">İçerik Detayı</h3>
+                <span class="close" onclick="closeContentModal()">&times;</span>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Content will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="supabaseClient.js"></script>
+    <script src="auth.js"></script>
+    <script>
 // Logout function
 async function logout() {
   if (confirm('Çıkış yapmak istediğinizden emin misiniz?')) {
@@ -37,8 +187,8 @@ function viewAnalytics() {
   // Here you would show detailed analytics
 }
 
-// Sample class data
-const classData = [
+// Sample class data - only declare once
+window.classData = window.classData || [
   {
     name: '11-A Türk Dili ve Edebiyatı',
     students: 28,
@@ -96,16 +246,28 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   console.log('Teacher dashboard initialized successfully!');
-  
-  // Auth durumunu kontrol et
+
+  // Auth durumunu kontrol et - sadece bir kez deneyim
   setTimeout(async () => {
     if (window.supabaseClient) {
-      const user = await kullaniciDurumKontrol();
-      if (user) {
-        console.log('Teacher authenticated successfully:', user.email);
-      } else {
-        console.log('Teacher auth check failed');
+      try {
+        const user = await kullaniciDurumKontrol();
+        if (user) {
+          console.log('Teacher authenticated successfully:', user.email);
+          // Load uploaded content after successful auth
+          loadUploadedContent();
+        } else {
+          console.log('Teacher not authenticated, redirecting...');
+          setTimeout(() => {
+            window.location.href = 'index.html';
+          }, 1000);
+        }
+      } catch (error) {
+        console.error('Auth check error:', error);
       }
+    } else {
+      console.log('Supabase client not ready, loading content anyway');
+      loadUploadedContent();
     }
   }, 2000);
 });
@@ -118,3 +280,76 @@ window.uploadContent = uploadContent;
 window.createTest = createTest;
 window.addLiteraryText = addLiteraryText;
 window.viewAnalytics = viewAnalytics;
+
+// Function to close the content modal
+function closeContentModal() {
+  const modal = document.getElementById('contentModal');
+  modal.classList.remove('show');
+  modal.style.display = 'none';
+  document.body.style.overflow = 'auto';
+}
+
+// Function to open and populate the content modal
+function openContentModal(title, content) {
+    const modal = document.getElementById('contentModal');
+    document.getElementById('modalTitle').textContent = title;
+    document.getElementById('modalBody').innerHTML = content;
+    modal.style.display = 'block';
+    modal.classList.add('show');
+    document.body.style.overflow = 'hidden';
+}
+
+// Close modal when clicking outside
+window.addEventListener('click', function(event) {
+  const modal = document.getElementById('contentModal');
+  if (event.target === modal) {
+    closeContentModal();
+  }
+});
+
+// Close modal with ESC key
+document.addEventListener('keydown', function(event) {
+  if (event.key === 'Escape') {
+    closeContentModal();
+  }
+});
+// Mock function to simulate fetching and displaying uploaded contents
+function loadUploadedContent() {
+    const contentList = document.getElementById('uploadedContentList');
+    if (!contentList) {
+        console.error('Content list element not found');
+        return;
+    }
+    
+    console.log('Loading uploaded content...');
+    contentList.innerHTML = ''; // Clear loading message
+
+    const contents = [
+        { title: '1. Hafta Ders Notları', description: 'Bu notlar 1. hafta işlenen konuları içermektedir.', fileType: 'pdf', fileUrl: '#' },
+        { title: '2. Hafta Sunumu', description: '2. hafta sunum içeriği', fileType: 'ppt', fileUrl: '#' },
+        { title: 'Ek Okuma Parçası', description: 'Ders ile alakalı ek okuma parçası', fileType: 'txt', fileUrl: '#' }
+    ];
+
+    if (contents.length === 0) {
+        contentList.innerHTML = '<div class="no-content"><i class="fas fa-folder-open"></i><p>Henüz yüklenmiş içerik bulunmuyor.</p></div>';
+        return;
+    }
+
+    contents.forEach(content => {
+        const contentDiv = document.createElement('div');
+        contentDiv.className = 'uploaded-content-item';
+        contentDiv.style.cssText = 'background: white; padding: 1rem; margin: 1rem 0; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);';
+        contentDiv.innerHTML = `
+            <h3 style="margin: 0 0 0.5rem 0; color: #333;">${content.title}</h3>
+            <p style="margin: 0 0 1rem 0; color: #666;">${content.description}</p>
+            <button onclick="openContentModal('${content.title}', '&lt;p&gt;İçerik detayları burada gösterilecek.&lt;/p&gt;')" style="background: #2563eb; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer;">Görüntüle</button>
+        `;
+        contentList.appendChild(contentDiv);
+    });
+    
+    console.log('Content loaded successfully');
+}
+</script>
+    <script src="teacher-dashboard.js"></script>
+</body>
+</html>
