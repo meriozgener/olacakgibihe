@@ -1,132 +1,256 @@
 
-// auth.js
+// auth.js - Authentication functions
 
-// Giriş fonksiyonu
-async function girisYap(email, sifre, kullaniciTuru) {
+async function girisYap(email, password, userType) {
   try {
-    // Supabase client'ın hazır olup olmadığını kontrol et
-    if (!window.supabase || !window.supabaseClient) {
-      alert("Sistem yükleniyor, lütfen birkaç saniye bekleyin ve tekrar deneyin...");
-      // Try to reinitialize
-      if (window.initializeSupabase) {
-        window.initializeSupabase();
-      }
+    // Supabase client kontrolü
+    if (!window.supabaseClient) {
+      console.error('Supabase client not initialized');
+      alert('Bağlantı hatası. Sayfayı yenileyin.');
       return false;
     }
 
-    const { data, error } = await window.supabase.auth.signInWithPassword({
+    console.log('Attempting login with:', { email, userType });
+
+    // Supabase ile giriş yap
+    const { data, error } = await window.supabaseClient.auth.signInWithPassword({
       email: email,
-      password: sifre
-    })
+      password: password
+    });
 
     if (error) {
+      console.error('Login error:', error);
+      
+      let errorMessage = 'Giriş hatası: ';
       if (error.message.includes('Invalid login credentials')) {
-        alert("E-posta veya şifre hatalı. Lütfen tekrar deneyin.");
+        errorMessage = 'E-posta veya şifre hatalı. Lütfen bilgilerinizi kontrol edin.\n\nEğer hesabınızı onaylamadıysanız, e-posta kutunuzu kontrol edin.';
+      } else if (error.message.includes('Email not confirmed')) {
+        errorMessage = 'E-posta adresiniz henüz onaylanmamış. Lütfen e-posta kutunuzu kontrol edin.';
       } else {
-        alert("Giriş başarısız: " + error.message);
+        errorMessage += error.message;
       }
-      return false;
-    } 
-    
-    alert("Giriş başarılı! Yönlendiriliyorsunuz...");
-    
-    // Kullanıcı türüne göre yönlendirme
-    setTimeout(() => {
-      if (kullaniciTuru === 'teacher') {
-        window.location.href = "teacher-dashboard.html";
-      } else {
-        window.location.href = "student-dashboard.html";
-      }
-    }, 1000);
-    
-    return true;
-  } catch (err) {
-    console.error('Giriş hatası:', err);
-    alert("Bir hata oluştu. Lütfen sayfayı yenileyin ve tekrar deneyin.");
-    return false;
-  }
-}
-
-// Kayıt fonksiyonu
-async function kayitOl(isim, email, sifre, kullaniciTuru) {
-  try {
-    // Supabase client'ın hazır olup olmadığını kontrol et
-    if (!window.supabase || !window.supabaseClient) {
-      alert("Sistem yükleniyor, lütfen birkaç saniye bekleyin ve tekrar deneyin...");
-      // Try to reinitialize
-      if (window.initializeSupabase) {
-        window.initializeSupabase();
-      }
+      
+      alert(errorMessage);
       return false;
     }
 
-    const { data, error } = await window.supabase.auth.signUp({
-      email: email,
-      password: sifre,
-      options: {
-        data: {
-          full_name: isim,
-          user_type: kullaniciTuru
-        }
+    if (data.user) {
+      console.log('Login successful:', data.user);
+      
+      // Kullanıcı tipine göre yönlendirme
+      if (userType === 'student') {
+        console.log('Redirecting to student dashboard');
+        window.location.href = 'student-dashboard.html';
+      } else if (userType === 'teacher') {
+        console.log('Redirecting to teacher dashboard');
+        window.location.href = 'teacher-dashboard.html';
       }
-    })
-
-    if (error) {
-      if (error.message.includes('User already registered')) {
-        alert("Bu e-posta adresi ile zaten kayıt olunmuş. Giriş yapmayı deneyin.");
-      } else if (error.message.includes('Password should be at least')) {
-        alert("Şifre en az 6 karakter olmalıdır.");
-      } else {
-        alert("Kayıt başarısız: " + error.message);
-      }
-      return false;
-    } else {
-      alert("Kayıt başarılı! Şimdi giriş yapabilirsiniz.");
+      
       return true;
     }
-  } catch (err) {
-    console.error('Kayıt hatası:', err);
-    alert("Bir hata oluştu. Lütfen sayfayı yenileyin ve tekrar deneyin.");
+
+    return false;
+  } catch (error) {
+    console.error('Login error:', error);
+    alert('Giriş sırasında bir hata oluştu');
     return false;
   }
 }
 
-// Çıkış fonksiyonu
-async function cikisYap() {
+async function kayitOl(name, email, password, userType) {
   try {
-    if (!window.supabase) {
-      window.location.href = "index.html";
-      return;
+    // Supabase client kontrolü
+    if (!window.supabaseClient) {
+      console.error('Supabase client not initialized');
+      alert('Bağlantı hatası. Sayfayı yenileyin.');
+      return false;
     }
-    
-    const { error } = await window.supabase.auth.signOut();
+
+    console.log('Attempting registration with:', { name, email, userType });
+
+    // Supabase ile kayıt ol
+    const { data, error } = await window.supabaseClient.auth.signUp({
+      email: email,
+      password: password,
+      options: {
+        data: {
+          full_name: name,
+          user_type: userType
+        }
+      }
+    });
+
     if (error) {
-      console.error('Çıkış hatası:', error);
+      console.error('Registration error:', error);
+      alert('Kayıt hatası: ' + error.message);
+      return false;
     }
-    window.location.href = "index.html";
-  } catch (err) {
-    console.error('Çıkış hatası:', err);
-    window.location.href = "index.html";
+
+    if (data.user) {
+      console.log('Registration successful:', data.user);
+      alert('Kayıt başarılı! E-posta adresinizi kontrol ederek hesabınızı onaylayın.');
+      return true;
+    }
+
+    return false;
+  } catch (error) {
+    console.error('Registration error:', error);
+    alert('Kayıt sırasında bir hata oluştu');
+    return false;
   }
 }
 
-// Kullanıcı oturum kontrolü
-async function oturumKontrol() {
+async function cikisYap() {
   try {
-    if (!window.supabase) {
-      return null;
+    if (!window.supabaseClient) {
+      console.error('Supabase client not initialized');
+      window.location.href = 'index.html';
+      return;
+    }
+
+    const { error } = await window.supabaseClient.auth.signOut();
+    
+    if (error) {
+      console.error('Logout error:', error);
     }
     
-    const { data: { session } } = await window.supabase.auth.getSession();
-    return session;
-  } catch (err) {
-    console.error('Oturum kontrol hatası:', err);
+    // Ana sayfaya yönlendir
+    window.location.href = 'index.html';
+  } catch (error) {
+    console.error('Logout error:', error);
+    window.location.href = 'index.html';
+  }
+}
+
+// Kullanıcının giriş durumunu kontrol et
+async function kullaniciDurumKontrol() {
+  try {
+    if (!window.supabaseClient) {
+      console.log('Supabase client not available for user check');
+      return null;
+    }
+
+    // Önce session kontrolü yap
+    const { data: { session }, error: sessionError } = await window.supabaseClient.auth.getSession();
+    
+    if (sessionError) {
+      console.error('Session check error:', sessionError);
+      return null;
+    }
+
+    if (session && session.user) {
+      console.log('Valid session found:', session.user.email);
+      return session.user;
+    }
+
+    // Session yoksa user bilgisini kontrol et
+    const { data: { user }, error: userError } = await window.supabaseClient.auth.getUser();
+    
+    if (userError) {
+      console.error('User check error:', userError);
+      return null;
+    }
+
+    return user;
+  } catch (error) {
+    console.error('User check error:', error);
     return null;
   }
 }
 
-// Export functions for global access
-window.girisYap = girisYap;
-window.kayitOl = kayitOl;
-window.cikisYap = cikisYap;
-window.oturumKontrol = oturumKontrol;
+// Dashboard kullanıcı kontrolü için retry mekanizması
+async function checkDashboardAuth(retryCount = 0) {
+  const maxRetries = 3;
+  
+  try {
+    // Supabase client'ın hazır olmasını bekle
+    if (!window.supabaseClient && retryCount < maxRetries) {
+      console.log(`Waiting for Supabase client... (attempt ${retryCount + 1})`);
+      setTimeout(() => checkDashboardAuth(retryCount + 1), 1000);
+      return;
+    }
+
+    const user = await kullaniciDurumKontrol();
+    if (!user) {
+      if (retryCount < maxRetries) {
+        console.log(`Auth check failed, retrying... (attempt ${retryCount + 1})`);
+        setTimeout(() => checkDashboardAuth(retryCount + 1), 1000);
+        return;
+      }
+      console.log('User not authenticated after retries, redirecting to login');
+      window.location.href = 'index.html';
+    } else {
+      console.log('User authenticated successfully');
+    }
+  } catch (error) {
+    console.error('Authentication check failed:', error);
+    if (retryCount < maxRetries) {
+      setTimeout(() => checkDashboardAuth(retryCount + 1), 1000);
+    } else {
+      window.location.href = 'index.html';
+    }
+  }
+}
+
+// Sayfa yüklendiğinde kullanıcı durumunu kontrol et
+document.addEventListener('DOMContentLoaded', function() {
+  // Eğer dashboard sayfalarındaysak kullanıcı kontrolü yap
+  const currentPage = window.location.pathname;
+  if (currentPage.includes('dashboard')) {
+    // Biraz bekle ve sonra kontrol et
+    setTimeout(() => checkDashboardAuth(), 1500);
+  }
+});
+
+// Supabase auth state değişikliklerini dinle - initialization'ı bekle
+function setupAuthStateListener() {
+  if (typeof window !== 'undefined' && window.supabaseClient) {
+    window.supabaseClient.auth.onAuthStateChange((event, session) => {
+      console.log('Auth state changed:', event, session);
+      
+      const currentPage = window.location.pathname;
+      
+      if (event === 'SIGNED_OUT' && currentPage.includes('dashboard')) {
+        // Kullanıcı çıkış yaptıysa ana sayfaya yönlendir
+        window.location.href = 'index.html';
+      }
+    });
+  } else {
+    // Supabase client henüz hazır değilse biraz bekle
+    setTimeout(setupAuthStateListener, 500);
+  }
+}
+
+// Auth listener'ı kur
+setTimeout(setupAuthStateListener, 1000);
+
+// Şifre sıfırlama fonksiyonu
+async function resetPassword() {
+  const email = prompt('Şifre sıfırlama linkinin gönderileceği e-posta adresinizi girin:');
+  
+  if (!email) return;
+  
+  try {
+    if (!window.supabaseClient) {
+      alert('Bağlantı hatası. Sayfayı yenileyin.');
+      return;
+    }
+
+    const { error } = await window.supabaseClient.auth.resetPasswordForEmail(email, {
+      redirectTo: window.location.origin + '/index.html'
+    });
+
+    if (error) {
+      console.error('Password reset error:', error);
+      alert('Şifre sıfırlama hatası: ' + error.message);
+    } else {
+      alert('Şifre sıfırlama linki e-posta adresinize gönderildi!');
+    }
+  } catch (error) {
+    console.error('Password reset error:', error);
+    alert('Şifre sıfırlama sırasında bir hata oluştu');
+  }
+}
+
+// Make function globally available
+window.resetPassword = resetPassword;
